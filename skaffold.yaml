@@ -1,0 +1,30 @@
+apiVersion: skaffold/v2beta6
+kind: Config
+deploy:
+  statusCheckDeadlineSeconds: 500
+  kubectl:
+    manifests:
+    - manifests/*
+build:
+  artifacts:
+  - image: djangoapp-image
+    context: djangoproject
+
+profiles:
+  - name: dev
+    activation:
+      - command: dev
+    build:
+      artifacts: 
+
+      - image: djangoapp-image
+        context: djangoproject
+        docker:
+          buildArgs:
+            DEBUG: 1
+        sync:
+          manual:
+          # Sync all the javascript files that are in the src folder
+          # with the container src folder
+          - src: 'src/**/*.py'
+            dest: .
