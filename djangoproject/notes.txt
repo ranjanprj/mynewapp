@@ -1,0 +1,14 @@
+kubectl get pod -l app=djangoapp  -o jsonpath="{.items[0].metadata.name}"
+set pod=djangoapp-7cbf9ff85d-gsz74
+
+kubectl exec %pod% --stdin --tty -- python /home/python/src/project/manage.py makemigrations
+
+kubectl exec djangoapp-5cd57dd7cd-m88x7 --stdin --tty -- python /home/python/src/project/manage.py migrate
+
+
+kubectl get pod -l app=postgres  -o jsonpath="{.items[0].metadata.name}"
+
+
+kubectl exec postgres-5ff6f99cc-d6lfd --stdin --tty --psql -U postgres
+
+test
